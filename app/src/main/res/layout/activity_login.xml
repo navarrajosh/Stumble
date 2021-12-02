@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".Login"
     android:orientation="vertical"
-    android:background="#B9CBBA">
+    android:background="#FFFFFF">
 
     <ImageView
         android:id="@+id/iv_logo"
@@ -16,7 +16,7 @@
         android:layout_margin="10dp"
         android:layout_gravity="center"
         android:paddingTop="1sp"
-        android:src="@drawable/Stumble" />
+        android:src="@drawable/stumble" />
 
     <EditText
         android:id="@+id/et_username"
