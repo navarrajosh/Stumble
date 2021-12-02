@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Stumble">
         <activity
+            android:name=".Stumble"
+            android:exported="false" />
+        <activity
+            android:name=".Profile"
+            android:exported="false" />
+        <activity
             android:name=".Login"
             android:exported="false" />
         <activity
