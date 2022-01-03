@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import ph.edu.dlsu.mobdeve.navarra.joseph.stumble.fragments.ChatFragment
 import ph.edu.dlsu.mobdeve.navarra.joseph.stumble.fragments.HomeFragment
 import ph.edu.dlsu.mobdeve.navarra.joseph.stumble.fragments.ProfileFragment
@@ -17,10 +18,11 @@ class Stumble : AppCompatActivity() {
         val homeFragment = HomeFragment()
         val chatFragment = ChatFragment()
         val profileFragment = ProfileFragment()
+        val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
         makeCurrentFragment(homeFragment)
 
-        bottom_navigation.setOnNavigationItemSelectedListener{ it ->
+        bottomNavigationView.setOnItemSelectedListener { it ->
             when(it.itemId){
                 R.id.home -> makeCurrentFragment(homeFragment)
                 R.id.chat -> makeCurrentFragment(chatFragment)
