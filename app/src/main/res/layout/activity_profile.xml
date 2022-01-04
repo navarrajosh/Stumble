@@ -15,7 +15,7 @@
         android:layout_height="100dp"
         android:layout_gravity="center"
         android:layout_marginTop="200dp"
-        android:src="@drawable/Stumble"
+        android:src="@drawable/stumble"
         />
 
     <TextView

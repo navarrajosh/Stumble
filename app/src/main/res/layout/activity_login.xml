@@ -16,11 +16,12 @@
         android:layout_margin="10dp"
         android:layout_gravity="center"
         android:paddingTop="1sp"
-        android:src="@drawable/stumble" />
+        android:src="@drawable/stumble"/>
 
     <EditText
         android:id="@+id/et_username"
         android:layout_width="match_parent"
+        android:inputType="text"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_marginTop="10dp"
@@ -33,6 +34,7 @@
 
     <EditText
         android:id="@+id/et_password"
+        android:inputType="textPassword"
         android:hint="Password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
