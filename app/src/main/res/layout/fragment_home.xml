@@ -27,27 +27,30 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/sample"/>
             <TextView
+                android:id="@+id/nameName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:textColor="@color/black"
-                android:text="Hi! I am bogart the stupid student"
+                android:text=""
                 android:layout_marginStart="9dp"
                 />
             <TextView
+                android:id="@+id/courseName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:textColor="@color/black"
-                android:text="CCS Student"
+                android:text=""
                 android:layout_marginStart="9dp"
                 />
             <TextView
+                android:id="@+id/schoolName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:textColor="@color/black"
-                android:text="De La Salle University"
+                android:text=""
                 android:layout_marginStart="9dp"
                 />
         </LinearLayout>

@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import org.w3c.dom.Text
 
 class Login : AppCompatActivity() {
 
@@ -15,6 +16,9 @@ class Login : AppCompatActivity() {
     var et_username : EditText? = null
     var et_password : EditText? = null
     var tv_signup : Button? = null
+    var nameName : TextView? = null
+    var courseName : TextView? = null
+    var schoolName : TextView? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,6 +29,14 @@ class Login : AppCompatActivity() {
         et_username = findViewById(R.id.et_username)
         et_password = findViewById(R.id.et_password)
         tv_signup = findViewById(R.id.tv_signup)
+        /*
+        nameName = findViewById(R.id.nameName)
+        courseName = findViewById(R.id.courseName)
+        schoolName = findViewById(R.id.schoolName)
+        nameName!!.setText(rs.getString(4))
+        schoolName!!.setText(rs.getString(5))
+        courseName!!.setText(rs.getString(6))
+         */
 
         var helper = stumbledb(applicationContext)
         var db = helper.readableDatabase
@@ -35,6 +47,7 @@ class Login : AppCompatActivity() {
                 listOf(et_username?.text.toString(), et_password?.text.toString()).toTypedArray()
             var rs = db.rawQuery("SELECT * FROM USERS WHERE UNAME = ? AND PWD = ?", args)
             if (rs.moveToNext()) {
+
                 Toast.makeText(applicationContext, "Login Successful",Toast.LENGTH_LONG).show()
                 val gotoStumble = Intent(applicationContext, Stumble::class.java)
                 startActivity(gotoStumble)
