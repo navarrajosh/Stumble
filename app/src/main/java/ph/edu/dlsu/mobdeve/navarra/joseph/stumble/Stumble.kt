@@ -47,7 +47,7 @@ class Stumble : AppCompatActivity() {
 
         bottomNavigationView.setOnItemSelectedListener { it ->
             when(it.itemId){
-                R.id.home -> makeCurrentFragment(homeFragment)
+                R.id. home-> makeCurrentFragment(homeFragment)
                 R.id.chat -> makeCurrentFragment(chatFragment)
                 R.id.profile -> makeCurrentFragment(profileFragment)
             }

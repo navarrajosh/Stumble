@@ -1,11 +1,11 @@
 package ph.edu.dlsu.mobdeve.navarra.joseph.stumble.fragments
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.view.GestureDetectorCompat
 import ph.edu.dlsu.mobdeve.navarra.joseph.stumble.R
 
 // TODO: Rename parameter arguments, choose names that match
@@ -23,11 +23,11 @@ class HomeFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var detector: GestureDetectorCompat
 
     var nameName : TextView? = null
     var courseName : TextView? = null
     var schoolName : TextView? = null
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,17 +36,28 @@ class HomeFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-
+        //detector = GestureDetectorCompat(activity,GestureListener())
 
     }
-
+    /*
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
-    }
+
+            val view =  inflater.inflate(R.layout.fragment_home, container, false)
+
+            view.setOnTouchListener(object : View.OnTouchListener {
+                override fun onTouch(v: View?, event: MotionEvent): Boolean {
+                    return if (detector.onTouchEvent(event)) {
+                        true
+                    }else{
+                        super.onTouchEvent(event)
+                }
+            }})
+            return view
+        }
+    */
 
     companion object {
         /**
@@ -67,4 +78,41 @@ class HomeFragment : Fragment() {
                 }
             }
     }
+    /*
+    inner class GestureListener: GestureDetector.SimpleOnGestureListener(){
+        private val SWIPE_THRESHOLD = 100
+        private val SWIPE_VELOCITY_THRESHOLD = 100
+        override fun onFling(
+            downEvent: MotionEvent?,
+            moveEvent: MotionEvent?,
+            velocityX: Float,
+            velocityY: Float
+        ): Boolean {
+            var diffX = moveEvent?.x?.minus(downEvent!!.x) ?: 0.0F
+            var diffY = moveEvent?.y?.minus(downEvent!!.y) ?: 0.0F
+
+            if(Math.abs(diffX) > Math.abs(diffY)){
+                //for swipe left and right
+                if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD){
+                    if(diffX > 0){
+                        this@HomeFragment.onSwipeRight()
+                    }else {
+                        this@HomeFragment.onSwipeLeft()
+                    }
+                }
+            }else{
+
+            }
+            return super.onFling(downEvent, moveEvent, velocityX, velocityY)
+        }
+    }
+
+    private fun onSwipeLeft() {
+        Toast.makeText(activity?.applicationContext, "LEFT SWIPE", Toast.LENGTH_LONG).show()
+    }
+
+    private fun onSwipeRight() {
+
+        Toast.makeText(activity?.applicationContext, "RIGHT SWIPE", Toast.LENGTH_LONG).show()
+    }*/
 }

@@ -8,23 +8,25 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 import org.w3c.dom.Text
 
 class Login : AppCompatActivity() {
 
-    var btn_submit : Button? = null
-    var et_username : EditText? = null
-    var et_password : EditText? = null
-    var tv_signup : Button? = null
-    var nameName : TextView? = null
-    var courseName : TextView? = null
-    var schoolName : TextView? = null
-
+    var btn_submit: Button? = null
+    var et_username: EditText? = null
+    var et_password: EditText? = null
+    var tv_signup: Button? = null
+    var nameName: TextView? = null
+    var courseName: TextView? = null
+    var schoolName: TextView? = null
+    private lateinit var mAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        mAuth = FirebaseAuth.getInstance()
         btn_submit = findViewById(R.id.btn_submit)
         et_username = findViewById(R.id.et_username)
         et_password = findViewById(R.id.et_password)
@@ -37,7 +39,7 @@ class Login : AppCompatActivity() {
         schoolName!!.setText(rs.getString(5))
         courseName!!.setText(rs.getString(6))
          */
-
+        /*
         var helper = stumbledb(applicationContext)
         var db = helper.readableDatabase
 
@@ -61,6 +63,29 @@ class Login : AppCompatActivity() {
         tv_signup!!.setOnClickListener{
             val gotoRegister = Intent(applicationContext, Register::class.java)
             startActivity(gotoRegister)
+        }*/
+
+        tv_signup!!.setOnClickListener {
+            val intent = Intent(this, Register::class.java)
+            startActivity(intent)
         }
+        btn_submit!!.setOnClickListener {
+            val username = et_username?.text.toString()
+            val password = et_password?.text.toString()
+
+            login(username, password)
+        }
+    }
+
+    private fun login(username: String, password: String) {
+        mAuth.signInWithEmailAndPassword(username, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    val intent = Intent(this@Login, Stumble::class.java)
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this@Login, "User does not exist", Toast.LENGTH_SHORT).show()
+                }
+            }
     }
 }

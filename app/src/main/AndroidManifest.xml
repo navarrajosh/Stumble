@@ -10,9 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Stumble">
         <activity
-            android:name=".Swipe"
-            android:exported="false" />
-        <activity
             android:name=".Register"
             android:exported="false"></activity>
         <activity

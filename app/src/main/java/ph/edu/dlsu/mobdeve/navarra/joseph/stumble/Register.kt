@@ -4,9 +4,11 @@ import android.content.ContentValues
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 
 class Register : AppCompatActivity() {
 
@@ -20,10 +22,13 @@ class Register : AppCompatActivity() {
     var et_age : EditText? = null
     var et_gender : EditText? = null
 
+    private lateinit var mAuth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
+        mAuth = FirebaseAuth.getInstance()
         btn_submit = findViewById(R.id.btn_submit)
         et_username = findViewById(R.id.et_username)
         et_password = findViewById(R.id.et_password)
@@ -33,7 +38,7 @@ class Register : AppCompatActivity() {
         et_program = findViewById(R.id.et_program)
         et_gender = findViewById(R.id.et_gender)
         et_age = findViewById(R.id.et_age)
-
+        /*
         var helper = stumbledb(applicationContext)
         var db = helper.readableDatabase
         var rs = db.rawQuery("SELECT * FROM USERS", null)
@@ -63,10 +68,47 @@ class Register : AppCompatActivity() {
             val gotoLogin = Intent(applicationContext, Login::class.java)
             startActivity(gotoLogin)
 
+        }*/
+        
+        btn_submit!!.setOnClickListener { 
+            val email = et_email?.text.toString()
+            val password = et_password?.text.toString()
+            
+            register(email, password)
         }
 
     }
 
+    private fun register(email: String, password: String) {
+        mAuth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+
+                    val intent = Intent(this@Register, Stumble::class.java)
+                    startActivity(intent)
+                } else {
+                    Log.e("login","data: $mAuth")
+                    Log.e("login","data: $mAuth")
+                   Toast.makeText(this@Register, "Some error occurred", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+    /*task.addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+        @Override
+        public void onSuccess(AuthResult authResult) {
+            // Task completed successfully
+            // ...
+        }
+    });
+    task.addOnFailureListener(new OnFailureListener() {
+        @Override
+        public void onFailure(@NonNull Exception e) {
+            // Task failed with an exception
+            // ...
+        }
+    });
+    https://developers.google.com/android/guides/tasks
+    */
 
 
 }
