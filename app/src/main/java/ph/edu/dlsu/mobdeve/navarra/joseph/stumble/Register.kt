@@ -89,8 +89,12 @@ class Register : AppCompatActivity() {
                 } else {
                     Log.e("login","data: $mAuth")
                     Log.e("login","data: $mAuth")
-                   Toast.makeText(this@Register, "Some error occurred", Toast.LENGTH_SHORT).show()
+
+                    Toast.makeText(this@Register, "Some error occurred", Toast.LENGTH_SHORT).show()
                 }
+            }
+            .addOnFailureListener{ e->
+            Toast.makeText(this@Register, "${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
     /*task.addOnSuccessListener(new OnSuccessListener<AuthResult>() {
