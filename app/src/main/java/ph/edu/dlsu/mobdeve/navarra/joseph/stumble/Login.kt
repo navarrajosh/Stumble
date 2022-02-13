@@ -14,7 +14,7 @@ import org.w3c.dom.Text
 class Login : AppCompatActivity() {
 
     var btn_submit: Button? = null
-    var et_username: EditText? = null
+    var et_email: EditText? = null
     var et_password: EditText? = null
     var tv_signup: Button? = null
     var nameName: TextView? = null
@@ -28,7 +28,7 @@ class Login : AppCompatActivity() {
 
         mAuth = FirebaseAuth.getInstance()
         btn_submit = findViewById(R.id.btn_submit)
-        et_username = findViewById(R.id.et_username)
+        et_email = findViewById(R.id.et_email)
         et_password = findViewById(R.id.et_password)
         tv_signup = findViewById(R.id.tv_signup)
         /*
@@ -70,22 +70,25 @@ class Login : AppCompatActivity() {
             startActivity(intent)
         }
         btn_submit!!.setOnClickListener {
-            val username = et_username?.text.toString()
-            val password = et_password?.text.toString()
+            val email = et_email?.text.toString().trim()
+            val password = et_password?.text.toString().trim()
 
-            login(username, password)
+            login(email, password)
         }
     }
 
-    private fun login(username: String, password: String) {
-        mAuth.signInWithEmailAndPassword(username, password)
+    private fun login(email: String, password: String) {
+        mAuth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val intent = Intent(this@Login, Stumble::class.java)
                     startActivity(intent)
                 } else {
-                    Toast.makeText(this@Login, "User does not exist", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Login, "User does not Exist", Toast.LENGTH_SHORT).show()
                 }
+            }
+            .addOnFailureListener{ e->
+                Toast.makeText(this@Login, "${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 }
