@@ -5,20 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.mobdeve.navarra.joseph.stumble.R
 import ph.edu.dlsu.mobdeve.navarra.joseph.stumble.UserAdapter
 import ph.edu.dlsu.mobdeve.navarra.joseph.stumble.databinding.FragmentChatBinding
-import ph.edu.dlsu.mobdeve.navarra.joseph.stumble.databinding.FragmentProfileBinding
 import ph.edu.dlsu.mobdeve.navarra.joseph.stumble.model.User
-import java.sql.DatabaseMetaData
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -71,20 +66,23 @@ class ChatFragment : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
 
                 userList.clear()
-                for(postSnapshot in snapshot.children){
+                for (postSnapshot in snapshot.children) {
                     val currentUser = postSnapshot.getValue(User::class.java)
-                    userList.add(currentUser!!)
+                    if (mAuth.currentUser?.uid != currentUser?.uid) {
+                        userList.add(currentUser!!)
+                    }
+                    adapter.notifyDataSetChanged()
                 }
-                adapter.notifyDataSetChanged()
             }
-
             override fun onCancelled(error: DatabaseError) {
 
             }
 
         })
-        return inflater.inflate(R.layout.fragment_chat, container, false)
+        return binding.root
     }
+
+
 
 
     companion object {

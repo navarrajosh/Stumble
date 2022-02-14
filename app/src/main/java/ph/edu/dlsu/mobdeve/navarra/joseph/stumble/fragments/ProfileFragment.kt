@@ -9,10 +9,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.*
+import ph.edu.dlsu.mobdeve.navarra.joseph.stumble.EditProfile
 import ph.edu.dlsu.mobdeve.navarra.joseph.stumble.Login
 import ph.edu.dlsu.mobdeve.navarra.joseph.stumble.R
 import ph.edu.dlsu.mobdeve.navarra.joseph.stumble.databinding.FragmentProfileBinding
+import ph.edu.dlsu.mobdeve.navarra.joseph.stumble.model.User
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,6 +33,9 @@ class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private lateinit var mAuth: FirebaseAuth
+    private lateinit var mDbrf: DatabaseReference
+    private lateinit var user: User
+    private lateinit var uid: String
 
 
 
@@ -40,15 +45,45 @@ class ProfileFragment : Fragment() {
     ): View? {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val signout: Button = binding.btnLogout
+        val edit: Button = binding.btnEdit
         // Inflate the layout for this fragment
         mAuth = FirebaseAuth.getInstance()
+        uid = mAuth.currentUser?.uid.toString()
+        mDbrf = FirebaseDatabase.getInstance().getReference("user")
+
+        if(uid.isNotEmpty()){
+            getUserData()
+        }
+        edit.setOnClickListener {
+            startActivity(Intent(activity?.applicationContext, EditProfile::class.java))
+        }
+
         signout.setOnClickListener {
             mAuth.signOut()
             startActivity(Intent(activity?.applicationContext, Login::class.java))
             activity?.finish()
         }
 
+
         return binding.root
+    }
+
+    private fun getUserData() {
+        mDbrf.child(uid).addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                user = snapshot.getValue(User:: class.java)!!
+                binding.tvFullname.setText(user.name)
+                binding.tvAge.setText(user.age)
+                binding.tvProg.setText(user.prog)
+                binding.tvUniv.setText(user.univ)
+                binding.tvOccu.setText(user.occupation)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 
     companion object {

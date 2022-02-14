@@ -17,7 +17,6 @@ class Stumble : AppCompatActivity() {
     var nameName : TextView? = null
     var courseName : TextView? = null
     var schoolName : TextView? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stumble)
