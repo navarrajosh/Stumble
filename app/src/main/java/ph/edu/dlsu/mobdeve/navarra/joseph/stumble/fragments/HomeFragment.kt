@@ -13,6 +13,7 @@ import ph.edu.dlsu.mobdeve.navarra.joseph.stumble.R
 import ph.edu.dlsu.mobdeve.navarra.joseph.stumble.databinding.FragmentHomeBinding
 import ph.edu.dlsu.mobdeve.navarra.joseph.stumble.databinding.FragmentProfileBinding
 import ph.edu.dlsu.mobdeve.navarra.joseph.stumble.model.User
+import java.lang.Math.abs
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,25 +25,29 @@ private const val ARG_PARAM2 = "param2"
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-
-class HomeFragment : Fragment() {
+// GestureDetector.OnGestureListener
+class HomeFragment : Fragment(){
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private lateinit var detector: GestureDetectorCompat
     private lateinit var mAuth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var user: User
     private lateinit var uid: String
-
-
+    private lateinit var gestureDetector: GestureDetector
+    private val swipeThreshold = 100
+    private val swipeVelocityThreshold = 100
+    var x2: Float = 0.0f
+    var x1: Float = 0.0f
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        //gestureDetector = GestureDetector(context, this)
 
 /*
             val view =  inflater.inflate(R.layout.fragment_home, container, false)
@@ -59,19 +64,20 @@ class HomeFragment : Fragment() {
         mAuth = FirebaseAuth.getInstance()
         uid = mAuth.currentUser?.uid.toString()
         database = FirebaseDatabase.getInstance().getReference("user")
-        val nameName : TextView = binding.nameName
-        val courseName : TextView = binding.courseName
-        val schoolName : TextView = binding.schoolName
+        val nameName: TextView = binding.nameName
+        val courseName: TextView = binding.courseName
+        val schoolName: TextView = binding.schoolName
         val ageAge: TextView = binding.ageAge
-        if(uid.isNotEmpty()){
+        if (uid.isNotEmpty()) {
             getUserData()
         }
         return binding.root
-        }
+    }
+
     private fun getUserData() {
-        database.child(uid).addValueEventListener(object: ValueEventListener {
+        database.child(uid).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                user = snapshot.getValue(User:: class.java)!!
+                user = snapshot.getValue(User::class.java)!!
                 binding.nameName.setText(user.name)
                 binding.ageAge.setText(user.age)
                 binding.courseName.setText(user.prog)
@@ -117,15 +123,61 @@ class HomeFragment : Fragment() {
          * @param param2 Parameter 2.
          * @return A new instance of fragment HomeFragment.
          */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
+        const val MIN_DISTANCE = 150
+        /*
         fun newInstance(param1: String, param2: String) =
             HomeFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
                 }
+            }*/
+    }
+
+/*
+    override fun onDown(e: MotionEvent?): Boolean {
+        return false
+    }
+
+    override fun onShowPress(e: MotionEvent?) {
+    }
+
+    override fun onSingleTapUp(e: MotionEvent?): Boolean {
+        return false
+    }
+
+    override fun onScroll(
+        e1: MotionEvent?,
+        e2: MotionEvent?,
+        distanceX: Float,
+        distanceY: Float
+    ): Boolean {
+        return false
+    }
+
+    override fun onLongPress(e: MotionEvent?) {
+
+    }
+
+    override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+        try {
+            val diffY = e2.y - e1.y
+            val diffX = e2.x - e1.x
+            if (abs(diffX) > abs(diffY)) {
+                if (abs(diffX) > swipeThreshold && abs(velocityX) > swipeVelocityThreshold) {
+                    if (diffX > 0) {
+                        Toast.makeText(applicationContext, "Left to Right swipe gesture", Toast.LENGTH_SHORT).show()
+                    }
+                    else {
+                        Toast.makeText(applicationContext, "Right to Left swipe gesture", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
+        }
+        catch (exception: Exception) {
+            exception.printStackTrace()
+        }
+        return true
     }
     /*
     inner class GestureListener: GestureDetector.SimpleOnGestureListener(){
@@ -164,4 +216,5 @@ class HomeFragment : Fragment() {
 
         Toast.makeText(activity?.applicationContext, "RIGHT SWIPE", Toast.LENGTH_LONG).show()
     }*/
+}*/
 }

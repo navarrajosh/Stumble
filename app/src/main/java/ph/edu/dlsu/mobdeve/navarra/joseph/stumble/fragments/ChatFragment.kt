@@ -46,10 +46,11 @@ class ChatFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        /*
         _binding = FragmentChatBinding.inflate(inflater, container, false)
         userList = ArrayList()
-        adapter = UserAdapter(this,userList)
+        //adapter = UserAdapter(this,userList)
         mAuth = FirebaseAuth.getInstance()
         mDbRef = FirebaseDatabase.getInstance().getReference()
         val chatRecyclerView: RecyclerView = binding.userRecyclerView
@@ -62,6 +63,7 @@ class ChatFragment : Fragment() {
         _binding!!.userRecyclerView.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
         _binding!!.userRecyclerView.adapter = adapter
             */
+
         mDbRef.child("user").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
 
@@ -78,7 +80,7 @@ class ChatFragment : Fragment() {
 
             }
 
-        })
+        })*/
         return binding.root
     }
 

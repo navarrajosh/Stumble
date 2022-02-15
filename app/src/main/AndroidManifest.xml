@@ -10,6 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Stumble">
         <activity
+            android:name=".Chat"
+            android:exported="false" />
+        <activity
+            android:name=".Home"
+            android:exported="false" />
+        <activity
+            android:name=".HomeTouch"
+            android:exported="false" />
+        <activity
             android:name=".ChatActivity"
             android:exported="false" />
         <activity
