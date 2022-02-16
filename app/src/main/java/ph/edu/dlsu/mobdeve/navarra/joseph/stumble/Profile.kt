@@ -1,16 +1,20 @@
 package ph.edu.dlsu.mobdeve.navarra.joseph.stumble
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.GestureDetector
 import android.widget.Button
+import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import ph.edu.dlsu.mobdeve.navarra.joseph.stumble.databinding.ActivityProfileBinding
-import ph.edu.dlsu.mobdeve.navarra.joseph.stumble.databinding.FragmentProfileBinding
 import ph.edu.dlsu.mobdeve.navarra.joseph.stumble.model.User
+import java.io.File
 import kotlin.math.sign
 
 class Profile : AppCompatActivity() {
@@ -21,6 +25,7 @@ class Profile : AppCompatActivity() {
     private lateinit var uid: String
     var signout: Button? = null
     var edit: Button? = null
+    private lateinit var strdb: StorageReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +61,7 @@ class Profile : AppCompatActivity() {
         }
 
     }
+
     private fun getUserData() {
         mDbrf.child(uid).addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -72,5 +78,13 @@ class Profile : AppCompatActivity() {
             }
 
         })
+        strdb = FirebaseStorage.getInstance().getReference("images/" + mAuth.currentUser?.uid)
+        val localfile = File.createTempFile("tempimage", "jpg")
+        strdb.getFile(localfile).addOnSuccessListener {
+            val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
+            binding!!.userprof.setImageBitmap(bitmap)
+        }.addOnFailureListener{
+            Toast.makeText(this, "Failed to Retrieve the image", Toast.LENGTH_SHORT).show()
+        }
     }
 }

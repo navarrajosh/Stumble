@@ -1,15 +1,20 @@
 package ph.edu.dlsu.mobdeve.navarra.joseph.stumble
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import ph.edu.dlsu.mobdeve.navarra.joseph.stumble.model.User
 
 class Register : AppCompatActivity() {
@@ -24,9 +29,13 @@ class Register : AppCompatActivity() {
     var et_program : EditText? = null
     var et_age : EditText? = null
     var et_gender : EditText? = null
+    var btn_upload: Button? = null
+    var iv_userpic: ImageView? = null
     private var status = "None"
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mDbRef: DatabaseReference
+    private lateinit var strdb: StorageReference
+    var uri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,37 +51,11 @@ class Register : AppCompatActivity() {
         et_program = findViewById(R.id.et_program)
         et_gender = findViewById(R.id.et_gender)
         et_age = findViewById(R.id.et_age)
-        /*
-        var helper = stumbledb(applicationContext)
-        var db = helper.readableDatabase
-        var rs = db.rawQuery("SELECT * FROM USERS", null)
-
-        btn_submit!!.setOnClickListener {
-            var cv = ContentValues()
-            cv.put("UNAME", et_username?.text.toString())
-            cv.put("PWD", et_password?.text.toString())
-            cv.put("EMAIL", et_email?.text.toString())
-            cv.put("fNAME", et_fullname?.text.toString())
-            cv.put("UNIV", et_school?.text.toString())
-            cv.put("COURSE", et_program?.text.toString())
-            cv.put("GENDER", et_gender?.text.toString())
-            cv.put("AGE", et_age?.text.toString())
-            db.insert("USERS", null, cv)
-
-            et_username?.setText("")
-            et_password?.setText("")
-            et_email?.setText("")
-            et_fullname?.setText("")
-            et_school?.setText("")
-            et_program?.setText("")
-            et_gender?.setText("")
-            et_age?.setText("")
-            et_username?.requestFocus()
-
-            val gotoLogin = Intent(applicationContext, Login::class.java)
-            startActivity(gotoLogin)
-
-        }*/
+        btn_upload = findViewById(R.id.btn_upload)
+        iv_userpic = findViewById(R.id.iv_userpic)
+        btn_upload!!.setOnClickListener{
+            chooseimage()
+        }
         
         btn_submit!!.setOnClickListener { 
             val email = et_email?.text.toString()
@@ -91,12 +74,27 @@ class Register : AppCompatActivity() {
 
     }
 
+    private fun chooseimage() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, 1001)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1001 && resultCode == RESULT_OK){
+            iv_userpic!!.setImageURI(data?.data)
+            uri = data?.data
+        }
+    }
+
     private fun register(name:String, email: String, password: String, username: String, occupation: String, univ: String, gen: String, age: String, prog: String, status: String ) {
         mAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     addUserToDatabase(name,email, username,occupation, univ, gen,age,prog, status, mAuth.currentUser?.uid!!)
-                    val intent = Intent(this@Register, Stumble::class.java)
+                    addImage()
+                    val intent = Intent(this@Register, Home::class.java)
                     startActivity(intent)
                 } else {
                     Toast.makeText(this@Register, "Some error occurred", Toast.LENGTH_SHORT).show()
@@ -105,6 +103,14 @@ class Register : AppCompatActivity() {
             .addOnFailureListener{ e->
             Toast.makeText(this@Register, "${e.message}", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun addImage() {
+        uri
+        strdb = FirebaseStorage.getInstance().getReference("images/" + mAuth.currentUser?.uid)
+        strdb.putFile(uri!!).addOnSuccessListener {
+            Toast.makeText(this@Register, "Image Uploaded", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun addUserToDatabase(
